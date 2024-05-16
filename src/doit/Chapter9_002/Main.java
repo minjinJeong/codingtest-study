@@ -7,8 +7,8 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        answer();
-        // mySource();
+        // answer();
+        mySource();
     }
     
     // 미완
@@ -23,15 +23,47 @@ public class Main {
         int M = Integer.parseInt(st.nextToken());
 
         boolean[][] visit = new boolean[N][M];
+        int[][] array = new int[N][M];
 
-        ArrayList<Integer>[] array = new ArrayList[N*M];
-        for (int i = 0; i < array.length; i++) {
-            array[i] = new ArrayList<Integer>();
+        // 배열 생성
+        for (int i = 0; i < N; i++) {
+            st = new StringTokenizer(br.readLine());
+            String[] num = st.nextToken().split("");
+            for (int j = 0; j < M; j++) {
+                array[i][j] = Integer.parseInt(num[j]);
+            }
         }
 
-        // 인접 리스트 만들기
+        // 상하좌우 좌표 배열
+        int[] dx = {0, -1, 1, 0};
+        int[] dy = {1, 0, 0, -1};
 
         // 탐색하기
+        Queue<int[]> queue = new LinkedList<>();
+        queue.add(new int[] {0, 0});
+
+        while (!queue.isEmpty()) {
+
+            // 큐에서 꺼내고 방문 체크
+            int[] q = queue.poll();
+            visit[q[0]][q[1]] = true;
+
+            // 상하좌우 확인 (인접 노드 확인)
+            for (int i = 0; i < 4; i++) {
+                int x = q[0] + dx[i];
+                int y = q[1] + dy[i];
+
+                if (x >= 0 && y >= 0 && x < N && y < M) {
+                    if (array[x][y] == 1 && !visit[x][y]) {
+                        array[x][y] += array[q[0]][q[1]];
+                        queue.add(new int[]{x, y});
+                    }
+                }
+            }
+        }
+
+        System.out.println(array[N-1][M-1]);
+        
     }
     
     static int[] dx = {0, 1, 0, -1};
