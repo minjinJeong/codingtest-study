@@ -11,7 +11,6 @@ public class Main {
         mySource();
     }
     
-    // 미완
     private static void mySource() throws IOException {
 
         BufferedReader br = 
