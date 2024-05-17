@@ -11,7 +11,6 @@ public class Main {
         mySource();
     }
     
-    // ERROR
     private static void mySource() throws IOException {
 
         BufferedReader br = 
@@ -20,43 +19,42 @@ public class Main {
         String seq = br.readLine();
 
         // 우선 순위: + -> -
-        Stack<Integer> stack = new Stack<>();
+        Stack<Integer> stack = new Stack<>();       // 더할 숫자
+        Queue<Integer> queue = new LinkedList<>();  // 뺄 숫자 
 
         // 값 받으면서 더하기 연산 먼저 수행
         int number = 0;
-        boolean isPlus = false;
         for (int i = 0; i < seq.length(); i++) {
             char s = seq.charAt(i);
 
             if (s == '+' || s == '-') {
 
-                if (isPlus) {
+                if (!stack.empty()) {
+                    // 더할 값이 있으면 더한 후에 큐에 삽입
                     number = stack.pop() + number;
-                    isPlus = false;
                 }
-                if (s == '+') {
-                    isPlus = true;
-                }
-                stack.push(number);
+
+                // 연산자에 따라서 스택 혹은 큐에 삽입
+                if (s == '+') stack.push(number);
+                else queue.add(number);
+
                 number = 0;
 
             }  else {
                 number = number*10 + (s-'0');
             }
         }
-        if (isPlus) {
+
+        // 마지막 값
+        if (!stack.empty()) {
             number = stack.pop() + number;
-            isPlus = false;
         }
-        stack.push(number);
+        queue.add(number);
 
         // 빼기 연산
-        int result = stack.pop();
-        if (!stack.isEmpty()) {
-            while (!stack.isEmpty()) {
-                result = result - stack.pop();
-            }
-            result = -result;
+        int result = queue.poll();
+        while (!queue.isEmpty()) {
+            result = result - queue.poll();
         }
 
         System.out.println(result);
