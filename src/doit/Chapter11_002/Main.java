@@ -1,7 +1,6 @@
 package doit.Chapter11_002;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
@@ -19,6 +18,7 @@ public class Main {
         Euler(M, N);
     }
     
+    // M부터 N까지의 수들의 서로소 찾기
     private static void Euler(int M, int N) {
 
         int[] A = new int[N+1];
@@ -44,6 +44,7 @@ public class Main {
         }
     }
     
+    // 특정 수의 서로소 찾기
     private static int Euler(int N) {
         
         int res = N;
