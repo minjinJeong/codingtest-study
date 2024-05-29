@@ -22,20 +22,17 @@ public class Main {
 
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        int V = Integer.parseInt(st.nextToken());
-        int E = Integer.parseInt(st.nextToken());
+        int N = Integer.parseInt(st.nextToken());
 
         // 초기화
-        int[][] array = new int[E][3];
-        for (int i = 0; i < E; i++) {
+        int[][] array = new int[N+1][2];
+        for (int i = 0; i < N+1; i++) {
             st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
-            int c = Integer.parseInt(st.nextToken());
 
             array[i][0] = a;
             array[i][1] = b;
-            array[i][2] = c;
         }
     }
 }
