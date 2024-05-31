@@ -24,7 +24,7 @@ public class Main {
         int N = Integer.parseInt(st.nextToken());
 
         // 초기화
-        array = new int[3][N+1];
+        array = new int[N+1][N+1];
         for (int i = 0; i < N-1; i++) {
             st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
