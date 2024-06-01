@@ -14,7 +14,10 @@ public class Main {
         mySource();
     }
 
-    static int[][] array;
+    static ArrayList<Integer>[] array;
+    static int[][] parent;
+    static int[] depth;
+    static boolean[] visited;
     private static void mySource() throws IOException {
 
         BufferedReader br = 
@@ -24,36 +27,89 @@ public class Main {
         int N = Integer.parseInt(st.nextToken());
 
         // 초기화
-        array = new int[N+1][N+1];
+        array = new ArrayList[N+1];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = new ArrayList<>();
+        }
+
         for (int i = 0; i < N-1; i++) {
             st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
 
-            array[0][b] = a;
+            array[b].add(a);
+            array[a].add(b);
         }
 
-        for (int i = 0; i < array.length; i++) {
-            parent(2, i);
+        // 깊이 배열과 부모 배열 초기화
+        int max = 0;
+        int temp = 1;
+        while(temp < N+1) {
+            temp <<= 1;
+            max++;
+        }
+
+        depth = new int[N+1];
+        parent = new int[N+1][max];
+
+        // DFS로 초기화
+        DFS(1, 1);
+        for (int i = 1; i < max; i++) {
+            for (int j = 1; j <= N; j++) {
+                parent[j][i] = parent[parent[j][i - 1]][i - 1];
+            }
         }
 
         // 구하기
         st = new StringTokenizer(br.readLine());
         int M = Integer.parseInt(st.nextToken());
-        
+
+        StringBuffer sb = new StringBuffer();
         for (int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
 
-            System.out.println(array[a][b]);
+            sb.append(LCA(a, b, max)).append("\n");
+        }
+
+        System.out.println(sb.toString());
+    }
+
+    private static void DFS(int node, int depthLen) {
+        depth[node] = depthLen;
+        for(int next : array[node]) {
+            if(depth[next] == 0) {
+                DFS(next, depthLen+1);
+                parent[next][0] = node;
+            }
         }
     }
 
-    private static int parent(int K, int N) {
-        if (K == 0) {
-            return array[K][array[K][N]];
+    private static int LCA(int a, int b, int max) {
+        if (depth[a] < depth[b]) {
+            int temp = a;
+            a = b;
+            b = temp;
         }
-        return array[K][N] = parent(K-1, N);
+
+        for (int i = max-1; i >= 0; i--) {
+            if (Math.pow(2, i) <= depth[a] - depth[b]) {
+                a = parent[a][i];
+            }
+        }
+
+        if (a==b) {
+            return a;
+        }
+        
+        for (int i = max-1; i >= 0; i--) {
+            if (parent[a][i] != parent[b][i]) {
+                a = parent[a][i];
+                a = parent[b][i];
+            }
+        }
+
+        return parent[a][0];
     }
 }
