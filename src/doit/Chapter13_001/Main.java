@@ -17,7 +17,6 @@ public class Main {
     static ArrayList<Integer>[] array;
     static int[][] parent;
     static int[] depth;
-    static boolean[] visited;
     private static void mySource() throws IOException {
 
         BufferedReader br = 
@@ -77,22 +76,32 @@ public class Main {
     }
 
     private static void DFS(int node, int depthLen) {
+        
+        // 현재 노드의 깊이 저장
         depth[node] = depthLen;
+
+        // 연결된 노드 탐색
         for(int next : array[node]) {
+            // 깊이는 1부터 시작하므로, 0이면 아직 탐색하지 않은 것이다.
             if(depth[next] == 0) {
+                // 연결된 노드는 깊이가 1 깊어진다.
                 DFS(next, depthLen+1);
+                // 부모 노드는 현재 노드
                 parent[next][0] = node;
             }
         }
     }
 
     private static int LCA(int a, int b, int max) {
+
+        // 깊이가 깊은 것을 a 노드로 지정
         if (depth[a] < depth[b]) {
             int temp = a;
             a = b;
             b = temp;
         }
 
+        // 부모 노드 탐색
         for (int i = max-1; i >= 0; i--) {
             if (Math.pow(2, i) <= depth[a] - depth[b]) {
                 a = parent[a][i];
@@ -103,6 +112,7 @@ public class Main {
             return a;
         }
         
+        // 공통 부모 노드 탐색
         for (int i = max-1; i >= 0; i--) {
             if (parent[a][i] != parent[b][i]) {
                 a = parent[a][i];
